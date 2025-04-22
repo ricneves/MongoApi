@@ -18,7 +18,9 @@ namespace MongoApi.Repository
             var database = client.GetDatabase(settings.Value.DatabaseName);
 
             // Collection from the database
-            _collection = database.GetCollection<T>(typeof(T).Name);
+            //_collection = database.GetCollection<T>(typeof(T).Name);
+            var collectionName = typeof(T).Name.ToLower() + "s";
+            _collection = database.GetCollection<T>(collectionName);
         }
 
         public async Task CreateAsync(T entity)
