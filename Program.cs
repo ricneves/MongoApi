@@ -1,4 +1,3 @@
-using MongoApi.Data;
 using MongoApi.Repository;
 using MongoApi.Settings;
 
@@ -18,8 +17,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddSingleton<MongoDbService>();
 
 var app = builder.Build();
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MongoApi.Data;
 using MongoApi.Entities;
-using MongoDB.Driver;
+using MongoApi.Repository;
 
 namespace MongoApi.Controllers
 {
@@ -9,49 +8,46 @@ namespace MongoApi.Controllers
     [Route("[controller]")]
     public class CustomersController : ControllerBase
     {
-        private readonly IMongoCollection<Customer>? _customers;
+        private readonly ICustomersRepository _customersRepository;
 
-        public CustomersController(MongoDbService mongoDbService)
+        public CustomersController(ICustomersRepository customersRepository)
         {
-            _customers = mongoDbService.Database?.GetCollection<Customer>("customers");
+            _customersRepository = customersRepository;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Customer>> Get()
+        public async Task<IActionResult> Get()
         {
-            return await _customers.Find(FilterDefinition<Customer>.Empty).ToListAsync();
+            var customers = await _customersRepository.GetAllAsync();
+            return Ok(customers);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer?>> GetById(string id)
+        public async Task<IActionResult> Get(string id)
         {
-            var filter = Builders<Customer>.Filter.Eq(x => x.Id, id);
-            var customer = _customers.Find(filter).FirstOrDefault();
-
+            var customer = await _customersRepository.GetByIdAsync(id);
             return customer is not null ? Ok(customer) : NotFound();
         }
 
         [HttpPost]
         public async Task<ActionResult> Create(Customer customer)
         {
-            await _customers.InsertOneAsync(customer);
-            return CreatedAtAction(nameof(GetById), new { id = customer.Id }, customer);
+            await _customersRepository.CreateAsync(customer);
+            return CreatedAtAction(nameof(Get), new { id = customer.Id }, customer);
         }
 
         [HttpPut]
-        public async Task<ActionResult> Update(Customer customer)
+        public async Task<IActionResult> Update(string id, Customer customer)
         {
-            var filter = Builders<Customer>.Filter.Eq(x => x.Id, customer.Id);
-            await _customers.ReplaceOneAsync(filter, customer);
-            return Ok();
+            await _customersRepository.UpdateAsync(id, customer);
+            return Ok(customer);
         }
 
         [HttpDelete]
-        public async Task<ActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(string id)
         {
-            var filter = Builders<Customer>.Filter.Eq(x => x.Id, id);
-            await _customers.DeleteOneAsync(filter);
-            return Ok();
+            await _customersRepository.DeleteAsync(id);
+            return Ok(new { Sucess = true, Message = "Customer deleted" });
         }
     }
 }
