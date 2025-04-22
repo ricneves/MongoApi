@@ -1,6 +1,45 @@
-@MongoApi_HostAddress = http://localhost:5207
+@MongoApi_HostAddress = https://localhost:7119
+@id=68076ff49a258bcc7cfc60ac
 
-GET {{MongoApi_HostAddress}}/weatherforecast/
-Accept: application/json
+GET {{MongoApi_HostAddress}}/api/products/{{id}}
+
+###
+
+GET {{MongoApi_HostAddress}}/api/products/68076ff49a258bcc7cfc60a1
+
+###
+
+GET {{MongoApi_HostAddress}}/api/products
+
+###
+
+POST {{MongoApi_HostAddress}}/api/products
+Content-Type: application/json
+
+{
+    "name": "pen pink",
+    "price": 1.55
+}
+
+###
+
+PUT {{MongoApi_HostAddress}}/api/products/{{id}}
+Content-Type: application/json
+
+{
+    "id":"{{id}}",
+    "name": "pen black",
+    "price": 1.05
+}
+
+###
+
+DELETE {{MongoApi_HostAddress}}/api/products/6807766b146323ff87e762e2
+
+###
+
+@minPrice=1.00
+@maxPrice=1.55
+GET {{MongoApi_HostAddress}}/api/products/GetByPriceRange/{{minPrice}}/{{maxPrice}}
 
 ###

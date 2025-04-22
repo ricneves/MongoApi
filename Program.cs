@@ -1,8 +1,18 @@
 using MongoApi.Data;
+using MongoApi.Repository;
+using MongoApi.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Bind mongodb settings
+builder.Services.Configure<MongoDbSettings>(
+    builder.Configuration.GetSection(nameof(MongoDbSettings)));
+
 // Add services to the container.
+// Add the repositories
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
