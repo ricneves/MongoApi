@@ -43,3 +43,40 @@ DELETE {{MongoApi_HostAddress}}/api/products/6807766b146323ff87e762e2
 GET {{MongoApi_HostAddress}}/api/products/GetByPriceRange/{{minPrice}}/{{maxPrice}}
 
 ###
+
+POST {{MongoApi_HostAddress}}/api/customers
+Content-Type: application/json
+{
+  "customerName": "test name",
+  "email": "email@test.com",
+  "isActive": false
+}
+
+###
+
+POST {{MongoApi_HostAddress}}/api/customers
+Content-Type: application/json
+{
+  "customerName": "customer with Active null",
+  "email": "email@test.com"
+}
+
+###
+
+POST {{MongoApi_HostAddress}}/api/customers
+Content-Type: application/json
+{
+  "customerName": "customer with Active false",
+  "email": "false@test.com",
+  "isActive": false
+}
+
+###
+
+GET {{MongoApi_HostAddress}}/api/customers
+
+###
+
+GET {{MongoApi_HostAddress}}/api/customers/GetActiveCustomers
+
+###

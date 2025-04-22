@@ -4,8 +4,8 @@ using MongoApi.Repository;
 
 namespace MongoApi.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("[controller]")]
     public class CustomersController : ControllerBase
     {
         private readonly ICustomersRepository _customersRepository;
@@ -19,6 +19,13 @@ namespace MongoApi.Controllers
         public async Task<IActionResult> Get()
         {
             var customers = await _customersRepository.GetAllAsync();
+            return Ok(customers);
+        }
+
+        [HttpGet("GetActiveCustomers")]
+        public async Task<IActionResult> GetActiveCustomers()
+        {
+            var customers = await _customersRepository.GetActiveCustomersAsync();
             return Ok(customers);
         }
 
